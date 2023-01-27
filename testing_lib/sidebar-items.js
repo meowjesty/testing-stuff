@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":[["add","The default add function."]]};

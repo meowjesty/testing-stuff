@@ -1,0 +1,23 @@
+name: Build and Deploy
+on: [push]
+permissions:
+  contents: write
+jobs:
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+    runs-on: ubuntu-latest
+    env:
+      RUSTDOCFLAGS: "--enable-index-page -Zunstable-options"
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo doc --document-private-items
+      - name: Deploy rust docs 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: target/doc # The folder the action should deploy
+
